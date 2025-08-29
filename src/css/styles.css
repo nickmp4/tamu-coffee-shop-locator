@@ -43,3 +43,21 @@ p {
     font-family: "Playfair";
     src: url("assets/fonts/Playfair-VariableFont.ttf") format("truetype");
 }
+
+button {
+    background: var(--Tan---2, #E7D7C1);
+    border-radius: 30px;
+    border: none;
+    color: var(--Brown---1, #412E2B);
+    cursor: pointer;
+    font-family: "Instrument Serif";
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 150;
+    line-height: normal;
+    margin: 10px;
+    padding: 10px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
