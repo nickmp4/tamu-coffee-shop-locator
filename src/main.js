@@ -1,24 +1,46 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+// const supabase = require('../supabase');
+import { supabase } from './supabase.js';
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('call-function')
+  const output = document.getElementById('output')
 
-setupCounter(document.querySelector('#counter'))
+  btn.addEventListener('click', async () => {
+    const { data, error } = await supabase.functions.invoke('hello-world', {
+      body: { name: 'Vite User' }
+    })
+    console.log("test");
+
+    if (error) {
+      console.error(error)
+      output.textContent = 'Error: ' + error.message
+    } else {
+      output.textContent = data.message
+    }
+  })
+})
+
+// function initMap() {
+//     const tamu = {lat: 30.617570170770634, lng: -96.33881838286645}
+//     const map = new google.maps.Map(document.getElementById("map"), 
+//     {
+//         zoom: 17.56,
+//         center: tamu,
+//     });
+// }
+
+// async function callBackEnd() {
+//     const { data } = await supabase.functions.invoke('hello-world', {
+//         body: {
+//             name: "testdummy",
+//         },
+//     });
+//     console.log(data);
+//     return data;
+// }
+
+// function callBackEnd2(){
+//     console.log("testing calling function")
+// }
+
+// window.callBackEnd = callBackEnd;
