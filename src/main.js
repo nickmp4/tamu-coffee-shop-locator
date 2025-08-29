@@ -1,24 +1,27 @@
-// const supabase = require('../supabase');
-import { supabase } from './supabase.js';
+import { createClient } from '@supabase/supabase-js'
 
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('call-function')
-  const output = document.getElementById('output')
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+)
 
-  btn.addEventListener('click', async () => {
+document.querySelector('#call-function').addEventListener('click', async () => {
+  try {
     const { data, error } = await supabase.functions.invoke('hello-world', {
-      body: { name: 'Vite User' }
+      body: { name: 'Nick' },
     })
-    console.log("test");
 
     if (error) {
-      console.error(error)
-      output.textContent = 'Error: ' + error.message
+      console.error('Function error:', error)
     } else {
-      output.textContent = data.message
+      console.log('Function result:', data)
+      document.querySelector('#output').textContent = data.message
     }
-  })
+  } catch (err) {
+    console.error('Unexpected error:', err)
+  }
 })
+
 
 // function initMap() {
 //     const tamu = {lat: 30.617570170770634, lng: -96.33881838286645}

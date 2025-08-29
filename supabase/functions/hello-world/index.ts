@@ -3,31 +3,48 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://hcxmubtfpminwqqlknff.supabase.co",
+]
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "http://localhost:5173",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-  "Access-Control-Allow-Headers": "*"
 }
 
-console.log("Hello from Functions!")
-
 Deno.serve(async (req) => {
+  // Handle preflight
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders })
+    return new Response('ok', { status: 200, headers: corsHeaders })
   }
 
+  // Check auth header
+  const authHeader = req.headers.get('authorization')
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: "Missing authorization header" }), {
+      status: 401,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+      },
+    })
+  }
+
+  // Parse body
   const body = await req.json()
 
-  return new Response(JSON.stringify({ message: `Hello ${body.name}` }), {
+  return new Response(JSON.stringify({ message: `Hello ${body.name || "World"}` }), {
     status: 200,
     headers: {
       ...corsHeaders,
-      "Content-Type": "application/json"
-    }
+      'Content-Type': 'application/json',
+    },
   })
 })
+
 
 /* To invoke locally:
 
