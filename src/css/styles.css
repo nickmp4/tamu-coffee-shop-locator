@@ -17,12 +17,6 @@ h1 {
     text-overflow: ellipsis;
 }
 
-.map-container {
-    fill: white;
-    border-radius: 30px;
-    border: 10px solid var(--Tan---2, #E7D7C1);
-    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
-}
 
 p {
     color: #654943;

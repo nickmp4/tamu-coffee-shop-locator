@@ -9,13 +9,20 @@ const allowedOrigins = [
   "https://hcxmubtfpminwqqlknff.supabase.co",
 ]
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-}
-
 Deno.serve(async (req) => {
+
+  const origin = req.headers.get("origin") || "";
+
+  // Check if origin is in the allowed list
+  const isAllowedOrigin = allowedOrigins.includes(origin);
+
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Vary": "Origin", // Good practice for caching proxies
+  };
+
   // Handle preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { status: 200, headers: corsHeaders })
