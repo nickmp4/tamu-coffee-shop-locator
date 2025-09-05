@@ -24,7 +24,7 @@ const supabase = createClient(
 
 async function getEmbedUrl() {
 
-  const q = "coffee shops in Bryan";
+  const q = "coffee shops in College Station";
   const lat = 30.61757;
   const lng = -96.33881;
   const zoom = 14;
