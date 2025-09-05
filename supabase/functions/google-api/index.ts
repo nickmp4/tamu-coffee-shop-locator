@@ -10,7 +10,7 @@ if (!GOOGLE_API_KEY) {
   throw new Error("Missing GOOGLE_API_KEY in environment");
 }
 
-// Allowed origins for CORS
+// Allowed origins for CORS, essentially what is allowed to use this
 const allowedOrigins = [
   "http://localhost:5173",
   "https://hcxmubtfpminwqqlknff.supabase.co"
@@ -18,7 +18,7 @@ const allowedOrigins = [
 
 Deno.serve(async (req) => {
   const origin = req.headers.get("origin") || "";
-  const isAllowed = allowedOrigins.includes(origin);
+  const isAllowed = allowedOrigins.includes(origin); //check if the origin is in allowedOrigins
 
   // Apply appropriate CORS headers
   const corsHeaders = {
@@ -57,6 +57,7 @@ Deno.serve(async (req) => {
   // Construct the embed URL
   const embedUrl = `https://www.google.com/maps/embed/v1/search?key=${GOOGLE_API_KEY}&q=${encodeURIComponent(query)}&center=${lat},${lng}&zoom=${zoom}`;
 
+  //return a response
   return new Response(JSON.stringify({ url: embedUrl }), {
     status: 200,
     headers: {
@@ -65,8 +66,6 @@ Deno.serve(async (req) => {
     }
   });
 });
-
-
 
 /* To invoke locally:
 

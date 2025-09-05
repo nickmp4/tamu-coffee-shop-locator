@@ -1,60 +1,50 @@
 import { createClient } from '@supabase/supabase-js'
 
+//create the client that will interface with supabase, url and key stored in .env
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-// document.querySelector('#call-function').addEventListener('click', async () => {
-//   try {
-//     const { data, error } = await supabase.functions.invoke('hello-world', {
-//       body: { name: 'Nick' },
-//     })
-
-//     if (error) {
-//       console.error('Function error:', error)
-//     } else {
-//       console.log('Function result:', data)
-//       document.querySelector('#output').textContent = data.message
-//     }
-//   } catch (err) {
-//     console.error('Unexpected error:', err)
-//   }
-// })
-
+//get the url to embed into the website
 async function getEmbedUrl() {
 
-  const q = "coffee shops in College Station";
-  const lat = 30.61757;
-  const lng = -96.33881;
-  const zoom = 14;
+  //parameters:
+  const q = "coffee shops in College Station"; //query, aka what are we looking for
+  const lat = 30.61757; //coords
+  const lng = -96.33881; //centered on evans because #lockedin
+  const zoom = 14; //how zoomed in do we want it to be
 
-  const url = new URL("https://hcxmubtfpminwqqlknff.functions.supabase.co/google-api");
+  const url = new URL("https://hcxmubtfpminwqqlknff.functions.supabase.co/google-api"); //url to access the supabase function
+  //set parameters
   url.searchParams.set("q", q);
   url.searchParams.set("lat", lat.toString());
   url.searchParams.set("lng", lng.toString());
   url.searchParams.set("zoom", zoom.toString());
 
+  //get the response from the supabase function "google-api" with specified parameters
   const res = await fetch(url.toString(), {
   method: "GET",
   headers: {
     "Authorization": `Bearer ` + import.meta.env.VITE_SUPABASE_ANON_KEY,
-  },
+  }, //authorize the request
 });
 
-  const data = await res.json();
+  const data = await res.json(); //extract data from response
 
-  if (!res.ok) {
+  if (!res.ok) { //if there is some issue with data, throw error
     throw new Error(data.error || "Unknown error from edge function");
   }
 
+  //return url given by supabase
   return data.url;
 }
 
-getEmbedUrl().then((url) => {
-  if (!url) return;
+getEmbedUrl().then((url) => { //once url is retrieved, run this
+  if (!url) return; //if no valid url, return
 
-  const iframe = document.createElement("iframe");
+  const iframe = document.createElement("iframe"); //create an iframe where the div is
+  //iframe options, changing these affects how the website sees it
   iframe.src = url;
   iframe.width = "100%";
   iframe.height = "450";
@@ -63,32 +53,6 @@ getEmbedUrl().then((url) => {
   iframe.allowFullscreen = true;
   iframe.referrerPolicy = "no-referrer-when-downgrade";
 
+  //add iframe to div
   document.getElementById("map-container").appendChild(iframe);
 });
-
-
-
-// function initMap() {
-//     const tamu = {lat: 30.617570170770634, lng: -96.33881838286645}
-//     const map = new google.maps.Map(document.getElementById("map"), 
-//     {
-//         zoom: 17.56,
-//         center: tamu,
-//     });
-// }
-
-// async function callBackEnd() {
-//     const { data } = await supabase.functions.invoke('hello-world', {
-//         body: {
-//             name: "testdummy",
-//         },
-//     });
-//     console.log(data);
-//     return data;
-// }
-
-// function callBackEnd2(){
-//     console.log("testing calling function")
-// }
-
-// window.callBackEnd = callBackEnd;

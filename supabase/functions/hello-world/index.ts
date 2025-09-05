@@ -1,8 +1,5 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
 
-// Setup type definitions for built-in Supabase Runtime APIs
+// OLD SUPABASE COMMAND, no longer implemented, but used for testing purposes
 
 const allowedOrigins = [
   "http://localhost:5173",
