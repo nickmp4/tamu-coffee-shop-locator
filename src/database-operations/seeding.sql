@@ -20,3 +20,15 @@ CREATE TABLE coffee_shop_features (
     tag_id INT REFERENCES feature_tags(tag_id) ON DELETE CASCADE, -- Foreign key to feature_tags, will delete when the tag_id is deleted
     PRIMARY KEY (store_id, tag_id) -- Composite primary key to prevent duplicate entries
 );
+
+-- create schema if not exists api;
+-- grant usage on schema api to anon, authenticated;
+
+-- create table if not exists api.test_table ();
+
+-- alter table api.test_table enable row level security;
+-- create policy "Allow public read access" 
+-- on api.test_table
+-- for select 
+-- using (true);
+-- grant select on api.test_table to anon, authenticated;
